@@ -2,8 +2,8 @@
 
  This postgreSQL query was run by https://sqliteonline.com/
 
--- SQL Project
---Data Cleaning
+
+## Data Cleaning
 
 ```sql
 select * from layoff;
@@ -18,7 +18,7 @@ select * from layoff;
 **4. Remove any Column**
 
 
-##1. Remove Duplicates
+## 1. Remove Duplicates
 
 ```sql
 create table layoff_staging (like layoff);
@@ -62,7 +62,7 @@ with duplicate_cte AS
  
  **Total rows 2361. Now 22 duplicate rows are deleted**
  
- ##2. Standardizing the data
+ ## 2. Standardizing the data
 
  
 **Remove unwanted space**
@@ -180,7 +180,7 @@ ORDER BY industry;
 **And if we check it looks like Bally's was the only one without a populated row to populate this null values**
 
 
-  ##3. Null values or blank Values
+  ## 3. Null values or blank Values
 
   ```sql
   SELECT * FROM layoff_staging2 WHERE 
@@ -199,7 +199,7 @@ ORDER BY industry;
      
  **After data cleaning proces 41 rows were deleted. Remaining rows are 2297**
 
-##4. Remove any Column
+## 4. Remove any Column
 
 ```sql
 ALTER TABLE layoff_staging2
