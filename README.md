@@ -9,18 +9,23 @@
 select * from layoff;
 ```
 
--- 1. Remove Duplicates
--- 2. Standardizing the DATA
--- 3. Null values or blank VALUES
--- 4. Remove any COLUMNS
+**1. Remove Duplicates**
 
--- 1. Remove Duplicates
+**2. Standardizing the Data**
+
+**3. Null values or blank Values**
+
+**4. Remove any Column**
+
+**1. Remove Duplicates**
 
 ```sql
 create table layoff_staging (like layoff);
 insert INTO layoff_staging SELECT * from layoff;
 SELECT * from layoff_staging;
 SELECT count (*) from layoff_staging;
+
+**Total Rows 2361**
 
 SELECT *,
  ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
@@ -48,17 +53,18 @@ with duplicate_cte AS
  SELECT * FROM layoff_staging2;
 ```
  
- --we can delete rows were row_num is greater than 2
+ --We can delete rows were row_num is greater than 2
 
 ```sql
  DELETE from layoff_staging2 WHERE row_num >1;
  SELECT COUNT (*) FROM layoff_staging2;
  ```
  
- --Total rows 2361. Now 22 duplicate rows were deleted
+ **Total rows 2361. Now 22 duplicate rows were deleted**
  
- -- 2. Standardizing the DATA
- -- Remove unwanted space
+ **2. Standardizing the data**
+ 
+**Remove unwanted space**
  
  ```sql
   SELECT company, TRIM(company) FROM layoff_staging2;
@@ -66,7 +72,7 @@ with duplicate_cte AS
   SELECT company FROM layoff_staging2;
   ```
 
-  --the Crypto has multiple different variations. We need to standardize that - let's say all to Crypto
+  **The Crypto has multiple different variations. We need to standardize that - let's say all to Crypto**
 
   ```sql
   SELECT DISTINCT industry FROM layoff_staging2 ORDER BY 1;
@@ -75,7 +81,7 @@ with duplicate_cte AS
   SELECT industry FROM layoff_staging2;
 ```
   
-  -- we have some "United States" and some "United States." with a period at the end. Let's standardize this.
+  **We have some "United States" and some "United States." with a period at the end. Let's standardize this.**
   
 ```sql
   SELECT DISTINCT country FROM layoff_staging2 ORDER BY  country;
@@ -83,7 +89,7 @@ with duplicate_cte AS
   SELECT country FROM layoff_staging2;
 ```
   
-  -- now we can convert the data type properly
+ **Now we can convert the data type properly**
 
 ```sql
   ALTER TABLE layoff_staging2 RENAME COLUMN date TO dates;
@@ -92,7 +98,7 @@ with duplicate_cte AS
 ```
   
   
-  -- if we look at industry it looks like we have some null and empty rows, let's take a look at these
+ **If we look at industry it looks like we have some null and empty rows, let's take a look at these**
 
   ```sql  
 SELECT DISTINCT industry
@@ -106,25 +112,29 @@ OR industry = ''
 ORDER BY industry;
 ```
 
--- let's take a look at these
+**Let's take a look at these**
 
 ```sql
 SELECT *
 FROM layoff_staging2
 WHERE company LIKE 'Bally%';
 ```
--- nothing wrong here
+**Nothing wrong here**
 
 ```sql
 SELECT * FROM layoff_staging2
 WHERE company LIKE 'Airbnb%';
 ```
 
--- it looks like Airbnb is a travel, but this one just isn't populated.
--- I'm sure it's the same for the others. What we can do is
--- write a query that if there is another row with the same company name, it will update it to the non-null industry values
--- makes it easy so if there were thousands we wouldn't have to manually check them all
--- we should set the blanks to nulls since those are typically easier to work with
+**It looks like Airbnb is a travel, but this one just isn't populated**
+
+**I'm sure it's the same for the others. What we can do is**
+
+**Write a query that if there is another row with the same company name, it will update it to the non-null industry values**
+
+**Makes it easy so if there were thousands we wouldn't have to manually check them all**
+
+**We should set the blanks to nulls since those are typically easier to work with**
 
 ```sql
 UPDATE layoff_staging2
@@ -132,7 +142,7 @@ SET industry = NULL
 WHERE industry = '';
 ```
 
--- now if we check those are all null
+**Now if we check those are all null**
 
 ```sql
 SELECT *
@@ -142,7 +152,7 @@ OR industry = ''
 ORDER BY industry;
 ```
 
--- now we need to populate those nulls if possible
+**Now we need to populate those nulls if possible**
 
 ```sql
 UPDATE layoff_staging2 t1
@@ -166,10 +176,10 @@ OR industry = ''
 ORDER BY industry;
 ```
 
--- and if we check it looks like Bally's was the only one without a populated row to populate this null values
+**And if we check it looks like Bally's was the only one without a populated row to populate this null values**
 
 
-  -- 3. Null values or blank VALUES
+  **3. Null values or blank Values**
 
   ```sql
   SELECT * FROM layoff_staging2 WHERE 
@@ -185,9 +195,10 @@ ORDER BY industry;
     SELECT count (*) from layoff_staging2;
 ```
     
-    --41 rows were deleted
+     
+ **After data cleaning proces 41 rows were deleted. Remaining rows are 2297**
 
--- 4. Remove any COLUMNS
+**4. Remove any Column**
 
 ```sql
 ALTER TABLE layoff_staging2
