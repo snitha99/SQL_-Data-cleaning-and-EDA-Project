@@ -17,7 +17,8 @@ select * from layoff;
 
 **4. Remove any Column**
 
-**1. Remove Duplicates**
+
+##1. Remove Duplicates
 
 ```sql
 create table layoff_staging (like layoff);
@@ -25,7 +26,6 @@ insert INTO layoff_staging SELECT * from layoff;
 SELECT * from layoff_staging;
 SELECT count (*) from layoff_staging;
 
-**Total Rows 2361**
 
 SELECT *,
  ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
@@ -60,9 +60,10 @@ with duplicate_cte AS
  SELECT COUNT (*) FROM layoff_staging2;
  ```
  
- **Total rows 2361. Now 22 duplicate rows were deleted**
+ **Total rows 2361. Now 22 duplicate rows are deleted**
  
- **2. Standardizing the data**
+ ##2. Standardizing the data
+
  
 **Remove unwanted space**
  
@@ -179,7 +180,7 @@ ORDER BY industry;
 **And if we check it looks like Bally's was the only one without a populated row to populate this null values**
 
 
-  **3. Null values or blank Values**
+  ##3. Null values or blank Values
 
   ```sql
   SELECT * FROM layoff_staging2 WHERE 
@@ -198,7 +199,7 @@ ORDER BY industry;
      
  **After data cleaning proces 41 rows were deleted. Remaining rows are 2297**
 
-**4. Remove any Column**
+##4. Remove any Column
 
 ```sql
 ALTER TABLE layoff_staging2
