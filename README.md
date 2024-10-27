@@ -5,6 +5,8 @@
 
 ## Data Cleaning
 
+**Import layoff dataset from localfile**
+
 ```sql
 select * from layoff;
 ```
