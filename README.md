@@ -228,3 +228,93 @@ DROP COLUMN row_num;
 SELECT * 
 FROM layoff_staging2;
 ```
+
+##Exploratory Data Analysis
+
+```sql
+SELECT * FROM layoff_staging2;
+```
+
+**Looking at Percentage to see how big these layoffs were**
+
+```sql
+SELECT MAX(total_laid_off),MAX(percentage_laid_off) FROM layoff_staging2;
+```
+
+**Which companies had 1 which is basically 100 percent of they company laid off**
+
+```sql
+SELECT * FROM layoff_staging2 where percentage_laid_off=1 ORDER by total_laid_off DESC;
+```
+
+**Companies with the most Total Layoffs, Amazon holds the top position.**
+
+```sql
+SELECT company, SUM(total_laid_off) FROM layoff_staging2
+GROUP BY 1 ORDER BY 2 DESC;
+
+SELECT company, SUM(percentage_laid_off) FROM layoff_staging2
+GROUP BY 1 ORDER BY 2 DESC;
+
+SELECT company, AVG(percentage_laid_off) FROM layoff_staging2
+GROUP BY 1 ORDER BY 2 DESC;
+
+SELECT company,TO_CHAR(dates,'YYYY'), SUM(total_laid_off) FROM layoff_staging2
+GROUP BY 1,2 ORDER BY 3 DESC;
+```
+
+**Based on industry type consumer industry on top position.**
+
+```sql
+SELECT industry, SUM(total_laid_off) FROM layoff_staging2
+GROUP BY 1 ORDER BY 2 DESC;
+```
+
+
+**Based on location US had more number of layoffs**
+
+```sql
+ SELECT country, SUM(total_laid_off) FROM layoff_staging2
+GROUP BY 1 ORDER BY 2 DESC;
+```
+
+
+**Based on dates**
+
+```sql
+SELECT MIN(dates),MAX(dates) FROM layoff_staging2;
+
+SELECT dates, sum(total_laid_off) FROM layoff_staging2 GROUP BY 1 ORDER by 1 DESC;
+
+SELECT TO_CHAR(dates,'YYYY')AS YEAR, sum(total_laid_off) FROM layoff_staging2 GROUP BY 1 ORDER by 1 DESC;
+
+SELECT TO_CHAR(dates,'MM')AS MONTH, sum(total_laid_off) FROM layoff_staging2 GROUP BY 1 ORDER by 1;
+ 
+ 
+
+SELECT stage, sum(total_laid_off) FROM layoff_staging2 GROUP BY 1 ORDER by 1 DESC limit 5;
+```
+
+
+**Earlier we looked at Companies with the most Layoffs. Now let's look at that per year. It's a little more difficult.**
+
+```sql
+WITH Company_Year AS 
+(
+  SELECT company, TO_CHAR(dates,'YYYY') AS years, SUM(total_laid_off) AS total_laid_off
+  FROM layoff_staging2
+  GROUP BY company, TO_CHAR(dates,'YYYY')
+)
+, Company_Year_Rank AS (
+  SELECT company, years, total_laid_off, DENSE_RANK() OVER (PARTITION BY years ORDER BY total_laid_off DESC) AS ranking
+  FROM Company_Year
+)
+SELECT company, years, total_laid_off, ranking
+FROM Company_Year_Rank
+WHERE ranking <= 3
+AND years IS NOT NULL
+ORDER BY years ASC, total_laid_off DESC;
+```
+
+
+
