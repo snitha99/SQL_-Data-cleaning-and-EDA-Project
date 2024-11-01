@@ -107,6 +107,12 @@ SELECT DISTINCT company FROM layoff_staging2 ORDER BY  company;
   ALTER TABLE layoff_staging2 ALTER COLUMN dates TYPE DATE USING TO_DATE(dates,'MM/DD/YYYY');
   SELECT dates FROM layoff_staging2;
 ```
+```sql
+ALTER TABLE layoff_staging2
+ALTER COLUMN total_laid_off TYPE FLOAT USING total_laid_off::FLOAT,
+ALTER COLUMN percentage_laid_off TYPE FLOAT USING percentage_laid_off::FLOAT,
+ALTER COLUMN funds_raised_millions TYPE FLOAT USING funds_raised_millions::FLOAT;
+```
   
   
  **If we look at industry it looks like we have some null and empty rows, let's take a look at these**
@@ -191,23 +197,13 @@ ORDER BY industry;
 
 
   ## 3. Null values or blank Values
+  
+-- The null values in total_laid_off, percentage_laid_off, and funds_raised_millions all look normal. I don't think I want to change that
 
-  ```sql
-  SELECT * FROM layoff_staging2 WHERE 
-   total_laid_off IS NULL OR 
-   percentage_laid_off IS NULL OR
-   funds_raised_millions IS NULL;
-   
-   DELETE FROM layoff_staging2
-   WHERE total_laid_off IS NULL
-   OR percentage_laid_off IS NULL
-   OR funds_raised_millions IS NULL;
+-- I like having them null because it makes it easier for calculations during the EDA phase
 
-    SELECT COUNT (*) from layoff_staging2;
-```
-    
-     
- **After data cleaning process remaining rows are 1089**
+-- So there isn't anything I want to change with the null values
+
 
 ## 4. Remove any Columns
 
