@@ -194,22 +194,22 @@ ORDER BY industry;
 
   ```sql
   SELECT * FROM layoff_staging2 WHERE 
-   total_laid_off IS NULL AND 
-   percentage_laid_off IS NULL AND
+   total_laid_off IS NULL OR 
+   percentage_laid_off IS NULL OR
    funds_raised_millions IS NULL;
    
    DELETE FROM layoff_staging2
    WHERE total_laid_off IS NULL
-   AND percentage_laid_off IS NULL
-   AND funds_raised_millions IS NULL;
+   OR percentage_laid_off IS NULL
+   OR funds_raised_millions IS NULL;
 
     SELECT COUNT (*) from layoff_staging2;
 ```
     
      
- **After data cleaning proces 41 rows were deleted. Remaining rows are 2297**
+ **After data cleaning process remaining rows are 1089**
 
-## 4. Remove any Column
+## 4. Remove any Columns
 
 ```sql
 ALTER TABLE layoff_staging2
