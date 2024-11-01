@@ -1,4 +1,4 @@
-# SQL_-Data-cleaning-and-EDA-Project
+# SQL_LAYOFF-Data-cleaning-and-EDA-Project
 
  This postgreSQL query was run by https://sqliteonline.com/
 
