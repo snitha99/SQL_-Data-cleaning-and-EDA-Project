@@ -91,6 +91,14 @@ WITH duplicate_cte AS
   UPDATE layoff_staging2 SET country ='United States' WHERE  country LIKE 'United States%';
   SELECT country FROM layoff_staging2;
 ```
+
+ **We have company name #Paid.Let's standardize this.**
+ 
+```sql
+SELECT DISTINCT company FROM layoff_staging2 ORDER BY  company;
+  UPDATE layoff_staging2 SET company ='Paid' WHERE  company LIKE '%#';
+  SELECT company FROM layoff_staging2 WHERE company='Paid';
+ ```
   
  **Now we can convert the data type properly**
 
