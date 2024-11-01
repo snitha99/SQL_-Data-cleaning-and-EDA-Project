@@ -8,7 +8,7 @@
 **Import layoff dataset from localfile**
 
 ```sql
-select * from layoff;
+SELECT * from layoff;
 ```
 
 **1. Remove Duplicates**
@@ -17,23 +17,23 @@ select * from layoff;
 
 **3. Null values or blank Values**
 
-**4. Remove any Column**
+**4. Remove any Columns**
 
 
 ## 1. Remove Duplicates
 
 ```sql
-create table layoff_staging (like layoff);
-insert INTO layoff_staging SELECT * from layoff;
+CREATE TABLE layoff_staging (like layoff);
+INSERT INTO layoff_staging SELECT * from layoff;
 SELECT * from layoff_staging;
-SELECT count (*) from layoff_staging;
+SELECT COUNT (*) from layoff_staging;
 
 
 SELECT *,
  ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
  as row_num FROM layoff_staging;
 
-with duplicate_cte AS
+WITH duplicate_cte AS
 (
   SELECT *,
   ROW_NUMBER() OVER
@@ -41,13 +41,13 @@ with duplicate_cte AS
     PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
     as row_num FROM layoff_staging
  )
-  SELECT * from duplicate_cte WHERE row_num >1;
+  SELECT * FROM duplicate_cte WHERE row_num >1;
   
   
   
-  create table layoff_staging2(like layoff_staging);
-  alter table layoff_staging2 add column row_num INT;
-  insert INTO layoff_staging2
+  CREATE TABLE layoff_staging2(like layoff_staging);
+  ALTER TABLE layoff_staging2 add column row_num INT;
+  INSERT INTO layoff_staging2
   SELECT *,
   ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
   as row_num FROM layoff_staging;
@@ -58,7 +58,7 @@ with duplicate_cte AS
  --We can delete rows were row_num is greater than 2
 
 ```sql
- DELETE from layoff_staging2 WHERE row_num >1;
+ DELETE FROM layoff_staging2 WHERE row_num >1;
  SELECT COUNT (*) FROM layoff_staging2;
  ```
  
@@ -195,7 +195,7 @@ ORDER BY industry;
    AND percentage_laid_off IS NULL
    AND funds_raised_millions IS NULL;
 
-    SELECT count (*) from layoff_staging2;
+    SELECT COUNT (*) from layoff_staging2;
 ```
     
      
