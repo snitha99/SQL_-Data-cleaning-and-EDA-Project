@@ -45,12 +45,12 @@ with duplicate_cte AS
   
   
   
-  create table layoff_staging2(like layoffs_staging);
+  create table layoff_staging2(like layoff_staging);
   alter table layoff_staging2 add column row_num INT;
   insert INTO layoff_staging2
   SELECT *,
   ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
-  as row_num FROM layoffs_staging;
+  as row_num FROM layoff_staging;
 
  SELECT * FROM layoff_staging2;
 ```
