@@ -28,7 +28,7 @@ INSERT INTO layoff_staging SELECT * from layoff;
 SELECT * FROM layoff_staging;
 SELECT COUNT (*) FROM layoff_staging;
 ```
-Total rows 2361
+**Total rows 2361**
 
 ```sql
 SELECT *,
@@ -200,11 +200,23 @@ ORDER BY industry;
 
   ## 3. Null values or blank Values
   
--- The null values in total_laid_off, percentage_laid_off, and funds_raised_millions all look normal. I don't think I want to change that
+```sql
+SELECT FROM layoff_staging2
+WHERE stage IS NULL
+OR dates IS NULL;
 
--- I like having them null because it makes it easier for calculations during the EDA phase
+DELETE FROM layoff_staging2
+WHERE stage IS NULL
+OR dates IS NULL;
+```
 
--- So there isn't anything I want to change with the null values
+**Total rows 2331**
+
+**The null values in total_laid_off, percentage_laid_off, and funds_raised_millions all look normal**
+
+**I like having them null because it makes it easier for calculations during the EDA phase**
+
+**So there isn't anything I want to change with the null values**
 
 
 ## 4. Remove any Columns
