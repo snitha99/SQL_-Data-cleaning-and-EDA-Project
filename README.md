@@ -27,8 +27,10 @@ CREATE TABLE layoff_staging (like layoff);
 INSERT INTO layoff_staging SELECT * from layoff;
 SELECT * FROM layoff_staging;
 SELECT COUNT (*) FROM layoff_staging;
+```
+Total rows 2361
 
-
+```sql
 SELECT *,
  ROW_NUMBER() OVER(PARTITION by company, 'location', industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions)
  as row_num FROM layoff_staging;
@@ -54,15 +56,15 @@ WITH duplicate_cte AS
 
  SELECT * FROM layoff_staging2;
 ```
- 
- --We can delete rows were row_num is greater than 2
+
+ **We can delete rows where row_num is greater than 2**
 
 ```sql
  DELETE FROM layoff_staging2 WHERE row_num >1;
  SELECT COUNT (*) FROM layoff_staging2;
  ```
  
- **Total rows 2361. Now 22 duplicate rows are deleted**
+ **Total rows 2338**
  
  ## 2. Standardizing the data
 
