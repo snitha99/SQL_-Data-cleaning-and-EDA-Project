@@ -8,7 +8,7 @@
 **Import layoff dataset from localfile**
 
 ```sql
-SELECT * from layoff;
+SELECT * FROM layoff;
 ```
 
 **1. Remove Duplicates**
@@ -25,8 +25,8 @@ SELECT * from layoff;
 ```sql
 CREATE TABLE layoff_staging (like layoff);
 INSERT INTO layoff_staging SELECT * from layoff;
-SELECT * from layoff_staging;
-SELECT COUNT (*) from layoff_staging;
+SELECT * FROM layoff_staging;
+SELECT COUNT (*) FROM layoff_staging;
 
 
 SELECT *,
@@ -79,7 +79,7 @@ WITH duplicate_cte AS
 
   ```sql
   SELECT DISTINCT industry FROM layoff_staging2 ORDER BY 1;
-  SELECT * from layoff_staging2 WHERE industry LIKE 'Crypto%';
+  SELECT * FROM layoff_staging2 WHERE industry LIKE 'Crypto%';
   UPDATE layoff_staging2 SET industry='Crypto' WHERE industry LIKE 'Crypto%';
   SELECT industry FROM layoff_staging2;
 ```
@@ -137,7 +137,7 @@ WHERE company LIKE 'Airbnb%';
 
 **Makes it easy so if there were thousands we wouldn't have to manually check them all**
 
-**We should set the blanks to nulls since those are typically easier to work with**
+**We should set the blanks to nulls since those are typically easier to work with them**
 
 ```sql
 UPDATE layoff_staging2
