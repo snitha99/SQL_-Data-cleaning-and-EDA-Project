@@ -229,7 +229,7 @@ SELECT *
 FROM layoff_staging2;
 ```
 
-##Exploratory Data Analysis
+## Exploratory Data Analysis
 
 ```sql
 SELECT * FROM layoff_staging2;
